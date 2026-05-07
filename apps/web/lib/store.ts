@@ -3,7 +3,7 @@
 import type { NormalizedSession } from "@crafter/jsonl-debug-core";
 import { create } from "zustand";
 
-export type View = "timeline" | "cost" | "heatmap";
+export type View = "timeline" | "tree" | "cost" | "heatmap";
 
 export type LoadStatus =
   | { kind: "idle" }

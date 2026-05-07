@@ -23,8 +23,8 @@ export function DropZone() {
         setOver(true);
       }}
       onDragLeave={() => setOver(false)}
-      className={`group rounded-2xl border-2 border-dashed transition-all px-12 py-20 text-center cursor-pointer ${
-        over ? "border-accent bg-card" : "border-border hover:border-muted-foreground"
+      className={`group rounded-xl border border-dashed transition-all px-12 py-20 text-center cursor-pointer ${
+        over ? "border-accent bg-card" : "border-border hover:border-muted-foreground/60"
       }`}
       onClick={() => inputRef.current?.click()}
     >
@@ -38,13 +38,16 @@ export function DropZone() {
           if (f) loadFile(f);
         }}
       />
-      <Upload className="mx-auto mb-4 size-8 text-muted-foreground group-hover:text-accent transition-colors" />
-      <div className="text-lg font-medium">
-        Drop your <code className="rounded bg-muted px-1.5 py-0.5 text-base">.jsonl</code>
+      <Upload className="mx-auto mb-4 size-7 text-muted-foreground group-hover:text-accent transition-colors" />
+      <div className="text-base font-medium">
+        Drop your{" "}
+        <code className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[13px]">
+          .jsonl
+        </code>
       </div>
       <div className="text-sm text-muted-foreground mt-2">or click to choose a file</div>
-      <div className="text-xs text-muted-foreground/80 mt-6">
-        Sessions never leave your browser.
+      <div className="text-xs text-muted-foreground/80 mt-8 font-mono">
+        sessions never leave your browser
       </div>
     </div>
   );

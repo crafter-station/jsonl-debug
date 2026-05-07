@@ -6,9 +6,11 @@ import { useSessionStore } from "@/lib/store";
 import { CostFlame } from "./views/CostFlame";
 import { Timeline } from "./views/Timeline";
 import { ToolHeatmap } from "./views/ToolHeatmap";
+import { Tree } from "./views/Tree";
 
-const TABS: { id: "timeline" | "cost" | "heatmap"; label: string; hint: string }[] = [
+const TABS: { id: "timeline" | "tree" | "cost" | "heatmap"; label: string; hint: string }[] = [
   { id: "timeline", label: "Timeline", hint: "every event in order" },
+  { id: "tree", label: "Tree", hint: "subagent branches" },
   { id: "cost", label: "Cost flame", hint: "tokens by turn" },
   { id: "heatmap", label: "Tool heatmap", hint: "tools across time" },
 ];
@@ -29,30 +31,34 @@ export function SessionShell() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0 z-10 border-b border-border bg-background/85 backdrop-blur">
-        <div className="px-6 py-3 flex items-center justify-between gap-6">
-          <div className="flex items-baseline gap-3 min-w-0">
+      <header className="sticky top-0 z-10 border-b border-border bg-background/90 backdrop-blur-md">
+        <div className="px-6 h-12 flex items-center justify-between gap-6">
+          <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
               onClick={reset}
-              className="text-base font-semibold tracking-tight hover:text-accent transition-colors shrink-0"
+              className="font-mono text-[13px] font-semibold tracking-tight hover:text-accent transition-colors shrink-0"
             >
               jsonl-debug
             </button>
-            <span className="text-xs text-muted-foreground truncate" title={fileName}>
+            <span className="text-muted-foreground/40 select-none">/</span>
+            <span
+              className="font-mono text-[12px] text-muted-foreground truncate"
+              title={fileName}
+            >
               {fileName}
             </span>
           </div>
-          <div className="hidden md:flex items-center gap-4 text-xs text-muted-foreground shrink-0">
+          <div className="hidden md:flex items-center gap-5 text-[11px] shrink-0 font-mono tabular-nums">
             <Stat label="events" value={session.events.length.toString()} />
             <Stat label="size" value={formatBytes(sizeBytes)} />
-            <Stat label="parse" value={`${parseMs.toFixed(0)} ms`} />
+            <Stat label="parse" value={`${parseMs.toFixed(0)}ms`} />
             {costSummary && (
               <Stat label="cost" value={`$${costSummary.totalUsd.toFixed(2)}`} highlight />
             )}
           </div>
         </div>
-        <nav className="px-6 flex gap-1 border-t border-border/60">
+        <nav className="px-4 flex gap-0 border-t border-border/60">
           {TABS.map((tab) => {
             const active = view === tab.id;
             return (
@@ -60,16 +66,21 @@ export function SessionShell() {
                 key={tab.id}
                 type="button"
                 onClick={() => setView(tab.id)}
-                className={`relative px-3 py-2.5 text-sm transition-colors ${
-                  active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                className={`relative px-3 h-10 text-[13px] transition-colors ${
+                  active
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {tab.label}
-                <span className="ml-2 text-[11px] text-muted-foreground/70 hidden sm:inline">
+                <span className="font-medium">{tab.label}</span>
+                <span className="ml-2 text-[11px] text-muted-foreground/60 hidden sm:inline font-mono">
                   {tab.hint}
                 </span>
                 {active && (
-                  <span className="absolute inset-x-2 -bottom-px h-px bg-accent" aria-hidden />
+                  <span
+                    className="absolute inset-x-3 -bottom-px h-px bg-foreground"
+                    aria-hidden
+                  />
                 )}
               </button>
             );
@@ -78,6 +89,7 @@ export function SessionShell() {
       </header>
       <div className="flex-1 min-h-0">
         {view === "timeline" && <Timeline session={session} />}
+        {view === "tree" && <Tree session={session} />}
         {view === "cost" && <CostFlame session={session} />}
         {view === "heatmap" && <ToolHeatmap session={session} />}
       </div>
@@ -85,11 +97,23 @@ export function SessionShell() {
   );
 }
 
-function Stat({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
+function Stat({
+  label,
+  value,
+  highlight,
+}: {
+  label: string;
+  value: string;
+  highlight?: boolean;
+}) {
   return (
     <span className="flex items-baseline gap-1.5">
-      <span className="text-muted-foreground/70">{label}</span>
-      <span className={highlight ? "text-accent font-medium" : "text-foreground font-medium"}>
+      <span className="text-muted-foreground/60 uppercase tracking-wider text-[10px]">
+        {label}
+      </span>
+      <span
+        className={highlight ? "text-accent font-medium" : "text-foreground font-medium"}
+      >
         {value}
       </span>
     </span>
