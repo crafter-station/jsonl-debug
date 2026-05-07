@@ -1,0 +1,16 @@
+{
+  "name": "@crafter/jsonl-debug-core",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./parsers/claude-code": "./src/parsers/claude-code.ts",
+    "./analyze": "./src/analyze/index.ts",
+    "./worker": "./src/workers/parse.worker.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}

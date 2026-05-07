@@ -1,0 +1,14 @@
+{
+  "name": "jsonl-debug",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "bun --filter './apps/web' dev",
+    "build": "bun --filter './apps/web' build",
+    "lint": "biome check --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4"
+  },
+  "packageManager": "bun@1.3.0"
+}
